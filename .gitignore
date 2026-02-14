@@ -1,0 +1,90 @@
+# ========================================
+# Dependencies
+# ========================================
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+name_env/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ========================================
+# Environment & Secrets
+# ========================================
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# ========================================
+# Agent Configuration
+# ========================================
+# Note: .agent/ is kept for template projects
+# Uncomment below to ignore in production:
+# .agent/
+
+# ========================================
+# IDE & Editors
+# ========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ========================================
+# Logs & Temp Files
+# ========================================
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# ========================================
+# Testing & Coverage
+# ========================================
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# ========================================
+# Build Artifacts
+# ========================================
+*.min.js
+*.min.css
+bundle.js
+.next/
+out/
+
+
+
+
+node_modules
+TASK.md
+Victor.md
+MinQS.md
+Hersynne.md
+Yeahoung.md
+Webots.md
+
+# ========================================
+# Internal Process Files
+# ========================================
+过程文件/

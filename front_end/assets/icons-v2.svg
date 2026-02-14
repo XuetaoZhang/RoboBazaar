@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <!-- Icon: Wallet (Chip Card) -->
+  <symbol id="icon-wallet-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="5" width="20" height="14" rx="2" stroke="url(#grad-icon)"/>
+    <path d="M2 10h20"/>
+    <path d="M6 15h2"/>
+    <path d="M16 15h2"/>
+    <defs>
+      <linearGradient id="grad-icon" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#6366f1"/>
+        <stop offset="100%" stop-color="#a853ba"/>
+      </linearGradient>
+    </defs>
+  </symbol>
+
+  <!-- Icon: Alert (Hex Pulse) -->
+  <symbol id="icon-alert-v2" viewBox="0 0 24 24" fill="none">
+    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="#ef4444" stroke-width="1.5"/>
+    <circle cx="12" cy="12" r="3" fill="#ef4444">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+  </symbol>
+
+  <!-- Icon: Success (Double Check) -->
+  <symbol id="icon-success-v2" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 12l5 5L17 7"/>
+    <path d="M12 17l2 2L24 9"/>
+  </symbol>
+
+  <!-- Icon: Signature (Digital Quill) -->
+  <symbol id="icon-sign-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+    <path d="M2 2l7.586 7.586"/>
+    <circle cx="11" cy="11" r="2"/>
+  </symbol>
+
+  <!-- Icon: Reset (Cyclic Arrow) -->
+  <symbol id="icon-reset-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+    <path d="M3 3v5h5"/>
+  </symbol>
+
+  <!-- Icon: Hand/Help -->
+  <symbol id="icon-help-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+    <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
+    <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
+    <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+  </symbol>
+  
+  <!-- Icon: USDC Coin -->
+  <symbol id="icon-usdc-v2" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="10" stroke="#2775ca" stroke-width="1.5"/>
+    <path d="M12 7v10M9 10h6M9 14h6" stroke="#2775ca" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M10 10a2 2 0 1 1 4 0a2 2 0 1 0-4 0" stroke="#2775ca" stroke-width="1.5"/>
+  </symbol>
+</svg>

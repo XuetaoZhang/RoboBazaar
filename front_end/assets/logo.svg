@@ -1,0 +1,13 @@
+<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon: Hex Nut Coin -->
+  <path d="M25 5L42.32 15V35L25 45L7.68 35V15L25 5Z" stroke="#00ff41" stroke-width="2" fill="#1a1a1a"/>
+  <circle cx="25" cy="25" r="8" stroke="#00ff41" stroke-width="2"/>
+  <path d="M25 17V21M25 29V33M17 25H21M29 25H33" stroke="#00ff41" stroke-width="2"/>
+  
+  <!-- Text: RoboBazaar (Stylized) -->
+  <text x="55" y="32" font-family="monospace" font-weight="bold" font-size="24" fill="#ffffff" letter-spacing="1">ROBO<tspan fill="#00ff41">BAZAAR</tspan></text>
+  
+  <!-- Accent Line -->
+  <rect x="55" y="38" width="120" height="2" fill="#333"/>
+  <rect x="55" y="38" width="40" height="2" fill="#00ff41"/>
+</svg>

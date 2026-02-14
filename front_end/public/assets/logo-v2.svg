@@ -1,0 +1,30 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-logo" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a853ba"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Symbol: Handshake (Abstract) -->
+  <g transform="translate(10, 10)">
+    <!-- Robotic Hand (Geometric, Angular) -->
+    <path d="M10 20 L20 20 L25 10 L35 10 L40 20 L35 30 L25 30 L20 20" stroke="#6366f1" stroke-width="2" fill="none"/>
+    <circle cx="20" cy="20" r="2" fill="#6366f1"/>
+    <circle cx="35" cy="20" r="2" fill="#6366f1"/>
+    
+    <!-- Human Hand (Organic, Curved) -->
+    <path d="M40 20 C45 10, 55 10, 60 20 C65 30, 55 40, 45 35" stroke="#a853ba" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Connection Spark -->
+    <circle cx="40" cy="20" r="3" fill="url(#grad-logo)">
+      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Text -->
+  <text x="70" y="38" font-family="'Inter', sans-serif" font-weight="700" font-size="22" fill="#fff" letter-spacing="-0.5">
+    Robo<tspan fill="url(#grad-logo)">Bazaar</tspan>
+  </text>
+</svg>

@@ -1,0 +1,292 @@
+#VRML_SIM R2023a utf8
+# RoboBazaar Warehouse - Simple Robot Version
+# All objects on ground level (Y=0)
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/humans/pedestrian/protos/Pedestrian.proto"
+
+WorldInfo {
+  title "RoboBazaar Warehouse"
+  basicTimeStep 16
+}
+
+Viewpoint {
+  orientation -0.4 0.85 0.35 1.1
+  position -4 6 6
+}
+
+TexturedBackground {
+  texture "noon_cloudy_empty"
+}
+
+TexturedBackgroundLight {
+}
+
+# ========== GROUND FLOOR ==========
+RectangleArena {
+  floorSize 10 8
+  floorTileSize 1 1
+  floorAppearance PBRAppearance {
+    baseColor 0.9 0.9 0.9
+    roughness 0.7
+  }
+  wallHeight 0.05
+  wallThickness 0.02
+}
+
+# ========== SHELF ROW (on ground, Y=0 for bottom) ==========
+DEF SHELF_1 Solid {
+  translation -3 0.3 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.55 0.35 0.2
+        roughness 0.8
+      }
+      geometry Box {
+        size 1.8 0.6 0.4
+      }
+    }
+  ]
+  name "shelf_1"
+  boundingObject Box { size 1.8 0.6 0.4 }
+}
+
+DEF SHELF_2 Solid {
+  translation 0 0.3 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.55 0.35 0.2
+        roughness 0.8
+      }
+      geometry Box {
+        size 1.8 0.6 0.4
+      }
+    }
+  ]
+  name "shelf_2"
+  boundingObject Box { size 1.8 0.6 0.4 }
+}
+
+DEF SHELF_3 Solid {
+  translation 3 0.3 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.55 0.35 0.2
+        roughness 0.8
+      }
+      geometry Box {
+        size 1.8 0.6 0.4
+      }
+    }
+  ]
+  name "shelf_3"
+  boundingObject Box { size 1.8 0.6 0.4 }
+}
+
+# ========== PACKAGES ON SHELVES ==========
+DEF PKG_1 Solid {
+  translation -3.4 0.7 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.7 0.5 0.3 }
+      geometry Box { size 0.15 0.15 0.15 }
+    }
+  ]
+  name "pkg_1"
+}
+
+DEF PKG_2 Solid {
+  translation -3 0.68 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.2 0.5 0.9 }
+      geometry Sphere { radius 0.08 }
+    }
+  ]
+  name "pkg_2"
+}
+
+DEF PKG_3 Solid {
+  translation -2.6 0.7 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.65 0.45 0.3 }
+      geometry Box { size 0.12 0.12 0.12 }
+    }
+  ]
+  name "pkg_3"
+}
+
+DEF PKG_4 Solid {
+  translation -0.3 0.7 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.7 0.55 0.35 }
+      geometry Box { size 0.14 0.14 0.14 }
+    }
+  ]
+  name "pkg_4"
+}
+
+DEF PKG_5 Solid {
+  translation 0 0.68 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.9 0.3 0.2 }
+      geometry Sphere { radius 0.08 }
+    }
+  ]
+  name "pkg_5"
+}
+
+DEF PKG_6 Solid {
+  translation 0.3 0.7 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.65 0.5 0.3 }
+      geometry Box { size 0.13 0.13 0.13 }
+    }
+  ]
+  name "pkg_6"
+}
+
+DEF PKG_7 Solid {
+  translation 2.7 0.7 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.7 0.5 0.35 }
+      geometry Box { size 0.14 0.14 0.14 }
+    }
+  ]
+  name "pkg_7"
+}
+
+DEF PKG_8 Solid {
+  translation 3 0.65 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.9 0.7 0.2 }
+      geometry Cylinder { height 0.1 radius 0.06 }
+    }
+  ]
+  name "pkg_8"
+}
+
+DEF PKG_9 Solid {
+  translation 3.3 0.7 -2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.6 0.45 0.3 }
+      geometry Box { size 0.12 0.12 0.12 }
+    }
+  ]
+  name "pkg_9"
+}
+
+# ========== EMPTY BOX AREA (on ground) ==========
+DEF BOX_ZONE Solid {
+  translation -3.5 0.01 2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 1 0.85 0.2 roughness 0.9 }
+      geometry Box { size 1.5 0.02 1 }
+    }
+  ]
+  name "box_zone"
+}
+
+DEF EMPTY_BOX_1 Solid {
+  translation -4 0.1 2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.7 0.5 0.3 }
+      geometry Box { size 0.2 0.2 0.2 }
+    }
+  ]
+  name "empty_box_1"
+}
+
+DEF EMPTY_BOX_2 Solid {
+  translation -3.5 0.1 2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.7 0.5 0.3 }
+      geometry Box { size 0.2 0.2 0.2 }
+    }
+  ]
+  name "empty_box_2"
+}
+
+DEF EMPTY_BOX_3 Solid {
+  translation -3 0.1 2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.7 0.5 0.3 }
+      geometry Box { size 0.2 0.2 0.2 }
+    }
+  ]
+  name "empty_box_3"
+}
+
+# ========== DELIVERY AREA (on ground) ==========
+DEF DELIVERY_ZONE Solid {
+  translation 3.5 0.01 2.5
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.2 0.75 0.3 roughness 0.9 }
+      geometry Box { size 1.5 0.02 1 }
+    }
+  ]
+  name "delivery_zone"
+}
+
+# ========== E-PUCK ROBOTS (simple, stable) ==========
+DEF ROBOT_01 E-puck {
+  translation -2 0 0
+  name "robot_01"
+  controller "epuck_controller"
+  emitter_channel 1
+  receiver_channel 2
+}
+
+DEF ROBOT_02 E-puck {
+  translation 0 0 0
+  name "robot_02"
+  controller "epuck_controller"
+  emitter_channel 1
+  receiver_channel 2
+}
+
+DEF ROBOT_03 E-puck {
+  translation 2 0 0
+  name "robot_03"
+  controller "epuck_controller"
+  emitter_channel 1
+  receiver_channel 2
+}
+
+# ========== HUMAN OPERATOR ==========
+DEF HUMAN Pedestrian {
+  translation 0 0 1.5
+  name "human"
+  controller "human_controller"
+  shirtColor 0.2 0.4 0.8
+  pantsColor 0.1 0.1 0.2
+}
+
+# ========== SUPERVISOR ==========
+DEF SUPERVISOR Robot {
+  children [
+    Emitter { name "emitter" channel 2 }
+    Receiver { name "receiver" channel 1 }
+  ]
+  name "supervisor"
+  controller "supervisor"
+  supervisor TRUE
+}

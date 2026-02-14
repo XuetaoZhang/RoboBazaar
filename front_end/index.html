@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoboBazaar | Fleet Command</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Ambient Background -->
+  <div class="glow-bg"></div>
+
+  <!-- SVG Sprite (Same as before) -->
+  <div style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" id="icon-sprite">
+        <symbol id="icon-wallet-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2" stroke="url(#grad-icon)"/>
+            <path d="M2 10h20"/>
+            <path d="M6 15h2"/>
+            <path d="M16 15h2"/>
+            <defs>
+              <linearGradient id="grad-icon" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#a853ba"/>
+              </linearGradient>
+            </defs>
+          </symbol>
+          <symbol id="icon-alert-v2" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="#ef4444" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="3" fill="#ef4444">
+              <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </symbol>
+          <symbol id="icon-success-v2" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12l5 5L17 7"/>
+            <path d="M12 17l2 2L24 9"/>
+          </symbol>
+          <symbol id="icon-sign-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+            <path d="M2 2l7.586 7.586"/>
+            <circle cx="11" cy="11" r="2"/>
+          </symbol>
+          <symbol id="icon-reset-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </symbol>
+          <symbol id="icon-help-v2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
+            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
+            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+          </symbol>
+          <symbol id="icon-usdc-v2" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#2775ca" stroke-width="1.5"/>
+            <path d="M12 7v10M9 10h6M9 14h6" stroke="#2775ca" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10 10a2 2 0 1 1 4 0a2 2 0 1 0-4 0" stroke="#2775ca" stroke-width="1.5"/>
+          </symbol>
+    </svg>
+  </div>
+
+  <div class="app-container">
+    <!-- 1. Header -->
+    <header class="header">
+      <div class="logo">
+        <img src="assets/logo-v2.svg" alt="RoboBazaar">
+      </div>
+      <div class="tag">
+        <svg class="icon-svg"><use href="#icon-wallet-v2"></use></svg>
+        <span style="font-family: var(--font-mono); font-size: 12px;">0x71C...4f2E</span>
+      </div>
+    </header>
+
+    <!-- 2. Left Sidebar: Fleet List -->
+    <div class="col-fleet">
+      <div class="card" style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+        <div style="padding: 0 8px 8px 8px; font-size: 11px; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.05);">
+          Active Units (3)
+        </div>
+        
+        <!-- Active Robot -->
+        <div class="fleet-item active">
+          <div class="robot-avatar">#01</div>
+          <div class="fleet-info">
+            <div class="robot-name">Robot #01</div>
+            <div class="robot-status">
+              <div class="dot green" id="fleet-dot-01"></div>
+              <span id="fleet-status-01">Operational</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Idle Robots -->
+        <div class="fleet-item">
+          <div class="robot-avatar">#02</div>
+          <div class="fleet-info">
+            <div class="robot-name">Robot #02</div>
+            <div class="robot-status">
+              <div class="dot gray"></div>
+              <span>Idle / Charging</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fleet-item">
+          <div class="robot-avatar">#03</div>
+          <div class="fleet-info">
+            <div class="robot-name">Robot #03</div>
+            <div class="robot-status">
+              <div class="dot gray"></div>
+              <span>Idle / Standby</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Center Column: Main Stage -->
+    <main class="col-center">
+      <!-- Critical Status Banner (High Priority) -->
+      <div id="status-banner" class="card status-banner">
+        <div class="status-group">
+          <span class="status-label">Robot ID</span>
+          <span class="status-value">ROBOT #01</span>
+        </div>
+        <div class="status-group">
+          <span class="status-label">Current Status</span>
+          <span id="banner-status-text" class="status-value" style="color: #10b981;">
+            <div class="dot green" id="banner-dot"></div> ACTIVE
+          </span>
+        </div>
+        <div class="status-group">
+          <span class="status-label">Error Type</span>
+          <span id="banner-error" class="status-value" style="color: var(--color-text-muted); font-size: 14px;">NONE</span>
+        </div>
+        <div class="status-group">
+          <span class="status-label">Risk Score</span>
+          <span id="banner-risk" class="status-value" style="color: #10b981;">0.02</span>
+        </div>
+        <div class="status-group">
+          <span class="status-label">Last Update</span>
+          <span id="banner-time" class="status-value" style="font-size: 12px; color: var(--color-text-muted);">10:42:05</span>
+        </div>
+      </div>
+
+      <!-- Video & Controls Card -->
+      <div class="card video-card">
+        <div class="video-wrapper">
+          <video id="robot-video" autoplay muted loop playsinline>
+            <source src="assets/52aff143030c7066a01470f13fe12a54.mp4" type="video/mp4">
+          </video>
+          
+          <div class="overlay-ui">
+            <div class="tag live">CAM_01</div>
+            <div class="tag">24ms Latency</div>
+          </div>
+
+          <!-- Modals -->
+          <div id="alert-modal" class="glass-modal">
+            <div class="modal-header">
+              <div class="icon-box alert"><svg class="icon-lg"><use href="#icon-alert-v2"></use></svg></div>
+              <div>
+                <div class="modal-title">Robot Needs Help</div>
+                <div class="modal-desc">Robot #01 is stuck (risk: 0.8)</div>
+              </div>
+            </div>
+            <div class="price-display">
+              <span class="modal-desc">Bounty</span>
+              <span class="price-val" style="color: #10b981;">0.50 USDC</span>
+            </div>
+            <button id="btn-help" class="btn-premium btn-primary">Help Robot</button>
+          </div>
+
+          <div id="payment-modal" class="glass-modal">
+            <div class="modal-header">
+              <div class="icon-box"><svg class="icon-lg"><use href="#icon-sign-v2"></use></svg></div>
+              <div>
+                <div class="modal-title">Sign Request</div>
+                <div class="modal-desc">Authorize X402 payment.</div>
+              </div>
+            </div>
+            <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted); border: 1px dashed rgba(255,255,255,0.1); margin-bottom: 16px;">
+              <div style="margin-bottom: 6px; color: #fff;">Sign Message:</div>
+              "I agree to pay 0.5 USDC to help Robot #01"
+            </div>
+            <button id="btn-sign" class="btn-premium btn-primary">Sign & Pay 0.50 USDC</button>
+          </div>
+
+          <div id="success-modal" class="glass-modal">
+            <div class="modal-header">
+              <div class="icon-box success"><svg class="icon-lg"><use href="#icon-success-v2"></use></svg></div>
+              <div>
+                <div class="modal-title">Access Granted</div>
+              </div>
+            </div>
+            <button id="btn-close-success" class="btn-premium btn-primary">Launch Controls</button>
+          </div>
+        </div>
+
+        <!-- Controls (Directly Under Video) -->
+        <div class="controls-deck">
+          <button id="btn-reset" class="btn-premium btn-ghost" disabled>
+            <svg class="icon-svg"><use href="#icon-reset-v2"></use></svg> Reset Robot
+          </button>
+          <button id="btn-trigger-error" class="btn-premium btn-ghost" style="flex: 0 0 40px; opacity: 0.2;">!</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 4. Right Sidebar: Data -->
+    <aside class="col-data">
+      <div class="card">
+        <div class="metrics-card-body">
+          
+          <!-- Personal Contributions -->
+          <div class="metrics-section">
+            <div class="metrics-header">My Contributions</div>
+            <div class="stat-grid-2x2">
+              <div class="stat-block">
+                <span class="stat-label">Earnings</span>
+                <span class="stat-value-lg stat-value-highlight">
+                  124.50<span class="stat-unit">USDC</span>
+                </span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-label">Tasks Solved</span>
+                <span class="stat-value-lg" id="tasks-solved">12</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Platform Metrics -->
+          <div class="metrics-section">
+            <div class="metrics-header">Platform Data</div>
+            <div class="stat-grid-2x2">
+              <div class="stat-block">
+                <span class="stat-label">Global Rescued</span>
+                <span class="stat-value-lg">8,492</span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-label">Platform Paid</span>
+                <span class="stat-value-lg">
+                  42.1<span class="stat-unit">kUSDC</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card" style="flex: 1; display: flex; flex-direction: column;">
+        <div style="padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 11px; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600;">System Logs</div>
+        <div id="log-feed" class="console-output"></div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

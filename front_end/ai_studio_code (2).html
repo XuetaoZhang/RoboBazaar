@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboBazaar | Operator Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        background: '#0B0C10',
+                        surface: '#12141C',
+                        surfaceHighlight: '#1A1D26',
+                        border: '#2A2E37',
+                        primary: '#6366f1', // Indigo
+                        accent: '#8b5cf6', // Violet
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'hero-glow': 'conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* 顶部辉光效果 */
+        .glow-bg {
+            position: absolute;
+            top: -20%; left: 50%;
+            transform: translateX(-50%);
+            width: 800px; height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 卡片风格 */
+        .card {
+            background: rgba(18, 20, 28, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 渐变文字 */
+        .text-gradient {
+            background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-danger {
+            background: linear-gradient(to right, #f87171, #fca5a5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 状态指示灯 */
+        .status-dot {
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* 模拟代码块 */
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0d0e12;
+            border-radius: 8px;
+            border: 1px solid #2A2E37;
+        }
+
+        /* 按钮光效 */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+
+        /* 动画 */
+        @keyframes pulse-red-border {
+            0%, 100% { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+            50% { border-color: rgba(239, 68, 68, 1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+        }
+        .alert-mode {
+            animation: pulse-red-border 2s infinite;
+        }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen flex flex-col font-sans selection:bg-primary selection:text-white">
+
+    <div class="glow-bg"></div>
+
+    <!-- Navbar -->
+    <nav class="border-b border-border bg-black/20 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">R</div>
+                <span class="font-bold text-lg tracking-tight text-white">RoboBazaar</span>
+                <span class="ml-2 px-2 py-0.5 rounded-full bg-surface border border-border text-[10px] text-gray-500 font-mono uppercase">Operator Console</span>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center gap-2 text-sm">
+                    <span class="relative flex h-2 w-2">
+                      <span id="navStatusPing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span id="navStatusDot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span id="navStatusText" class="text-gray-400">System Operational</span>
+                </div>
+                <button class="flex items-center gap-2 px-4 py-2 bg-surface hover:bg-surfaceHighlight border border-border rounded-lg text-xs font-medium transition-colors text-white group">
+                    <i data-lucide="wallet" class="w-3 h-3 text-gray-400 group-hover:text-white"></i>
+                    0x71C...4f2E
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Grid -->
+    <main class="flex-1 max-w-[1600px] mx-auto w-full p-6 grid grid-cols-12 gap-6">
+        
+        <!-- Left Column: Stats & Robots List (3 cols) -->
+        <div class="col-span-12 lg:col-span-3 flex flex-col gap-6">
+            <!-- Revenue Card -->
+            <div class="card p-5 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="bar-chart-2" class="w-16 h-16 text-indigo-500"></i>
+                </div>
+                <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">My Earnings</h3>
+                <div class="text-3xl font-bold text-white flex items-baseline gap-1">
+                    <span id="earningsVal">0.50</span> <span class="text-sm font-normal text-gray-500">USDC</span>
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-xs text-emerald-400">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>+12% this week</span>
+                </div>
+            </div>
+
+            <!-- Task Card -->
+            <div class="card p-5">
+                 <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-4">Contribution</h3>
+                 <div class="flex items-center gap-4">
+                     <div class="relative w-16 h-16">
+                         <svg class="w-full h-full transform -rotate-90">
+                             <circle cx="32" cy="32" r="28" stroke="#1f2937" stroke-width="6" fill="transparent" />
+                             <circle id="progressCircle" cx="32" cy="32" r="28" stroke="#8b5cf6" stroke-width="6" fill="transparent" stroke-dasharray="175" stroke-dashoffset="140" class="transition-all duration-1000"/>
+                         </svg>
+                         <div class="absolute inset-0 flex items-center justify-center font-bold text-white text-sm" id="solvedCount">1</div>
+                     </div>
+                     <div>
+                         <div class="text-white font-medium">Robots Rescued</div>
+                         <div class="text-xs text-gray-500">Top 5% Operator</div>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Active Robots List -->
+            <div class="card p-0 flex-1 flex flex-col min-h-[200px]">
+                <div class="p-4 border-b border-border flex justify-between items-center">
+                    <h3 class="font-medium text-white text-sm">Active Units</h3>
+                    <span class="px-2 py-0.5 rounded bg-surface border border-border text-[10px] text-gray-400">1 Online</span>
+                </div>
+                <div class="p-2 space-y-1">
+                    <!-- Robot Item (Active) -->
+                    <div class="p-3 rounded-lg bg-surfaceHighlight border border-border flex items-center justify-between cursor-pointer ring-1 ring-indigo-500/20">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 status-dot"></div>
+                            <div>
+                                <div class="text-xs font-bold text-white">ROBO-BZA-01</div>
+                                <div class="text-[10px] text-gray-500">Pick & Place Task</div>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600"></i>
+                    </div>
+                    <!-- Robot Item (Offline) -->
+                    <div class="p-3 rounded-lg hover:bg-surface border border-transparent flex items-center justify-between opacity-50 cursor-not-allowed">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                            <div>
+                                <div class="text-xs font-bold text-gray-400">ROBO-BZA-02</div>
+                                <div class="text-[10px] text-gray-600">Offline</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Column: Video & Controls (6 cols) -->
+        <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+            
+            <!-- Video Card -->
+            <div id="videoCard" class="card relative overflow-hidden group border-indigo-500/20">
+                <!-- Header Overlay -->
+                <div class="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 to-transparent z-10 flex justify-between items-start pointer-events-none">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-1 rounded bg-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> Live
+                        </span>
+                        <span class="text-xs text-gray-300 font-mono">CAM_01</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-400 bg-black/50 px-2 py-1 rounded">24ms latency</span>
+                </div>
+
+                <!-- Alert Overlay (Initially Hidden) -->
+                <div id="alertOverlay" class="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm hidden flex-col items-center justify-center transition-all duration-300">
+                    <div class="text-center transform scale-95 transition-transform duration-300" id="alertBox">
+                        <div class="w-16 h-16 mx-auto bg-red-500/10 rounded-full flex items-center justify-center mb-4 border border-red-500/30">
+                            <i data-lucide="alert-triangle" class="w-8 h-8 text-red-500"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-1">Anomaly Detected</h2>
+                        <p class="text-sm text-red-300 mb-6 font-mono">Collision detected. Risk Score: 0.82</p>
+                        <button onclick="openPaymentModal()" class="px-6 py-3 bg-red-600 hover:bg-red-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-red-500/20 transition-all btn-glow flex items-center gap-2 mx-auto">
+                            <i data-lucide="zap" class="w-4 h-4"></i>
+                            Initiate Rescue (X402)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Video Container (Constrained Aspect Ratio) -->
+                <div class="aspect-video w-full bg-black relative">
+                   <iframe class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" 
+                        src="https://www.youtube.com/embed/dO40fMJE5MQ?si=IFKzCcb912kuYZrm&autoplay=1&mute=1&controls=0&loop=1&playlist=dO40fMJE5MQ" 
+                        title="Robot Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Control Deck -->
+            <div class="card p-5">
+                <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-4">Manual Override Controls</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="btnReset" disabled class="h-12 border border-border rounded-lg bg-surface flex items-center justify-center gap-2 text-sm text-gray-600 font-medium transition-all hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Orientation
+                    </button>
+                    <button id="btnResume" disabled class="h-12 border border-border rounded-lg bg-surface flex items-center justify-center gap-2 text-sm text-gray-600 font-medium transition-all hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i data-lucide="play" class="w-4 h-4"></i> Resume Task
+                    </button>
+                </div>
+                <div class="mt-4 pt-4 border-t border-border">
+                    <div class="flex items-center justify-between text-xs">
+                         <span class="text-gray-500">Control Permission:</span>
+                         <span id="controlStatus" class="font-mono text-gray-500 flex items-center gap-1">
+                             <i data-lucide="lock" class="w-3 h-3"></i> LOCKED
+                         </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Logs & Debug (3 cols) -->
+        <div class="col-span-12 lg:col-span-3 flex flex-col gap-6">
+            <!-- Risk Analysis -->
+            <div class="card p-5">
+                <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Real-time Analysis</h3>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm text-gray-300">Operational Risk</span>
+                    <span id="riskValue" class="text-sm font-mono text-emerald-400">Low (0.02)</span>
+                </div>
+                <div class="w-full bg-surfaceHighlight rounded-full h-1.5 mb-6 overflow-hidden">
+                    <div id="riskBar" class="bg-gradient-to-r from-emerald-500 to-emerald-300 h-1.5 rounded-full" style="width: 2%"></div>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-500">Grip Pressure</span>
+                        <span class="text-gray-300 font-mono">12.4 PSI</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-500">Motor Temp</span>
+                        <span class="text-gray-300 font-mono">42°C</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Logs -->
+            <div class="card flex-1 flex flex-col min-h-[200px] max-h-[400px]">
+                <div class="p-3 border-b border-border bg-surfaceHighlight/50 rounded-t-lg">
+                    <h3 class="text-xs font-medium text-gray-400 font-mono">System Output</h3>
+                </div>
+                <div id="logConsole" class="p-4 overflow-y-auto text-[10px] font-mono space-y-2 text-gray-500 h-full scrollbar-hide">
+                    <div class="flex gap-2"><span class="text-gray-700">10:42:01</span> <span>Connection established</span></div>
+                    <div class="flex gap-2"><span class="text-gray-700">10:42:02</span> <span>Video feed synced</span></div>
+                    <div class="flex gap-2"><span class="text-gray-700">10:42:05</span> <span class="text-emerald-500">System Ready</span></div>
+                </div>
+            </div>
+
+            <!-- Debug Button -->
+            <button onclick="triggerAnomaly()" class="text-xs text-gray-600 hover:text-white transition-colors text-right mt-2">
+                // Simulate Failure (Debug)
+            </button>
+        </div>
+    </main>
+
+    <!-- Payment Modal (Glassmorphism) -->
+    <div id="paymentModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-[#12141c] w-full max-w-md border border-border rounded-xl shadow-2xl relative overflow-hidden transform scale-95 transition-transform" id="paymentCard">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-border bg-surfaceHighlight/30">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-white">Unlock Controls</h3>
+                    <div class="px-2 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded text-[10px] text-indigo-400 font-mono uppercase">
+                        X402 Protocol
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Robot #01 requires manual intervention.</p>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6">
+                <!-- Price Tag -->
+                <div class="flex justify-between items-end mb-6">
+                    <span class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Due</span>
+                    <div class="text-3xl font-bold text-white">0.50 <span class="text-lg text-gray-500 font-normal">USDC</span></div>
+                </div>
+
+                <!-- Code Snippet -->
+                <div class="code-block p-4 mb-6">
+                    <div class="flex items-center gap-2 mb-2 border-b border-gray-700 pb-2">
+                        <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-[10px] text-gray-500 ml-auto">payload.json</span>
+                    </div>
+                    <code class="text-xs text-indigo-300 block">
+                        {<br>
+                        &nbsp;&nbsp;"target": "ROBO-01",<br>
+                        &nbsp;&nbsp;"action": "unlock_controls",<br>
+                        &nbsp;&nbsp;"price": 500000n<br>
+                        }
+                    </code>
+                </div>
+
+                <!-- Action Button -->
+                <button id="btnPay" onclick="processPayment()" class="w-full py-3.5 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                    <span id="btnPayText">Sign & Pay 0.5 USDC</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // UI References
+        const ui = {
+            videoCard: document.getElementById('videoCard'),
+            alertOverlay: document.getElementById('alertOverlay'),
+            modal: document.getElementById('paymentModal'),
+            paymentCard: document.getElementById('paymentCard'),
+            btnPay: document.getElementById('btnPay'),
+            btnPayText: document.getElementById('btnPayText'),
+            log: document.getElementById('logConsole'),
+            riskVal: document.getElementById('riskValue'),
+            riskBar: document.getElementById('riskBar'),
+            navStatus: document.getElementById('navStatusText'),
+            navDot: document.getElementById('navStatusDot'),
+            navPing: document.getElementById('navStatusPing'),
+            btnReset: document.getElementById('btnReset'),
+            btnResume: document.getElementById('btnResume'),
+            controlStatus: document.getElementById('controlStatus'),
+            solvedCount: document.getElementById('solvedCount'),
+            earnings: document.getElementById('earningsVal')
+        };
+
+        let state = {
+            solved: 1,
+            earned: 0.50
+        };
+
+        function addLog(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            const colorClass = type === 'error' ? 'text-red-400' : (type === 'success' ? 'text-emerald-400' : 'text-gray-300');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 fade-in';
+            div.innerHTML = `<span class="text-gray-700">${time}</span> <span class="${colorClass}">${msg}</span>`;
+            ui.log.appendChild(div);
+            ui.log.scrollTop = ui.log.scrollHeight;
+        }
+
+        // 1. 触发故障
+        function triggerAnomaly() {
+            addLog('SENSOR ALERT: Collision detected in Axis-Z', 'error');
+            addLog('Robot State changed to: STUCK', 'error');
+            
+            // 视频卡片变红框
+            ui.videoCard.classList.add('alert-mode');
+            
+            // 显示视频覆盖层
+            ui.alertOverlay.classList.remove('hidden');
+            ui.alertOverlay.classList.add('flex');
+            
+            // 更新 Risk 面板
+            ui.riskVal.innerText = "CRITICAL (0.82)";
+            ui.riskVal.classList.replace('text-emerald-400', 'text-red-500');
+            ui.riskBar.classList.replace('from-emerald-500', 'from-red-500');
+            ui.riskBar.classList.replace('to-emerald-300', 'to-red-400');
+            ui.riskBar.style.width = "82%";
+
+            // 更新导航栏状态
+            ui.navStatus.innerText = "Attention Required";
+            ui.navStatus.classList.replace('text-gray-400', 'text-red-400');
+            ui.navDot.classList.replace('bg-emerald-500', 'bg-red-500');
+            ui.navPing.classList.replace('bg-emerald-400', 'bg-red-500');
+        }
+
+        // 2. 打开支付模态框
+        function openPaymentModal() {
+            ui.modal.classList.remove('hidden');
+            ui.modal.classList.add('flex');
+            // 小延迟为了动画
+            setTimeout(() => {
+                ui.modal.classList.remove('opacity-0');
+                ui.paymentCard.classList.remove('scale-95');
+                ui.paymentCard.classList.add('scale-100');
+            }, 10);
+        }
+
+        // 3. 支付流程
+        function processPayment() {
+            ui.btnPay.disabled = true;
+            ui.btnPayText.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...';
+            lucide.createIcons();
+
+            setTimeout(() => {
+                ui.btnPayText.innerText = "Verifying Signature...";
+                
+                setTimeout(() => {
+                    // Success
+                    ui.btnPay.classList.replace('bg-white', 'bg-emerald-500');
+                    ui.btnPay.classList.replace('text-black', 'text-white');
+                    ui.btnPayText.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Payment Successful';
+                    lucide.createIcons();
+                    
+                    addLog('Payment authorized: 0.50 USDC', 'success');
+                    
+                    setTimeout(() => {
+                        closeModalAndRecover();
+                    }, 1000);
+                }, 1500);
+            }, 1000);
+        }
+
+        // 4. 恢复系统
+        function closeModalAndRecover() {
+            // 隐藏 Modal
+            ui.modal.classList.add('opacity-0');
+            ui.paymentCard.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => {
+                ui.modal.classList.add('hidden');
+                ui.modal.classList.remove('flex');
+            }, 300);
+
+            // 隐藏 Video Overlay
+            ui.alertOverlay.classList.add('hidden');
+            ui.alertOverlay.classList.remove('flex');
+            ui.videoCard.classList.remove('alert-mode');
+
+            // 解锁控制
+            ui.controlStatus.innerHTML = '<i data-lucide="unlock" class="w-3 h-3"></i> UNLOCKED';
+            ui.controlStatus.classList.replace('text-gray-500', 'text-emerald-400');
+            ui.controlStatus.classList.replace('font-mono', 'font-bold');
+            
+            [ui.btnReset, ui.btnResume].forEach(btn => {
+                btn.disabled = false;
+                btn.classList.add('border-indigo-500', 'text-white', 'hover:bg-indigo-500/10');
+                btn.classList.remove('bg-surface', 'text-gray-600');
+                // 绑定点击事件恢复状态
+                btn.onclick = () => {
+                    addLog('Command sent: RESUME_TASK', 'info');
+                    resetToNormal();
+                };
+            });
+            lucide.createIcons();
+        }
+
+        function resetToNormal() {
+            addLog('Robot Status: ACTIVE', 'success');
+            
+            // 恢复 UI 到绿色
+            ui.riskVal.innerText = "Low (0.02)";
+            ui.riskVal.classList.replace('text-red-500', 'text-emerald-400');
+            ui.riskBar.classList.replace('from-red-500', 'from-emerald-500');
+            ui.riskBar.classList.replace('to-red-400', 'to-emerald-300');
+            ui.riskBar.style.width = "2%";
+
+            ui.navStatus.innerText = "System Operational";
+            ui.navStatus.classList.replace('text-red-400', 'text-gray-400');
+            ui.navDot.classList.replace('bg-red-500', 'bg-emerald-500');
+            ui.navPing.classList.replace('bg-red-500', 'bg-emerald-400');
+
+            // 锁定按钮
+            [ui.btnReset, ui.btnResume].forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('border-indigo-500', 'text-white', 'hover:bg-indigo-500/10');
+                btn.classList.add('bg-surface', 'text-gray-600');
+                btn.onclick = null;
+            });
+
+            ui.controlStatus.innerHTML = '<i data-lucide="lock" class="w-3 h-3"></i> LOCKED';
+            ui.controlStatus.classList.replace('text-emerald-400', 'text-gray-500');
+
+            // 更新数据
+            state.solved++;
+            state.earned += 0.5;
+            ui.solvedCount.innerText = state.solved;
+            ui.earnings.innerText = state.earned.toFixed(2);
+            
+            // 重置 Modal 按钮状态以便下次使用
+            ui.btnPay.disabled = false;
+            ui.btnPay.className = "w-full py-3.5 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2";
+            ui.btnPayText.innerText = "Sign & Pay 0.5 USDC";
+
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

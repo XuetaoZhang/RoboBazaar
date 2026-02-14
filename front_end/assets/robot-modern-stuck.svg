@@ -1,0 +1,44 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Container Shape (Card-like) -->
+  <defs>
+    <filter id="glow-orange" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
+    </filter>
+  </defs>
+
+  <rect x="20" y="20" width="160" height="160" rx="20" fill="#1c1917" stroke="#451a03" stroke-width="2"/>
+  
+  <!-- Icon: Abstract Robot Arm / Node (Stuck) -->
+  <g transform="translate(100, 100)">
+    <!-- Central Pivot -->
+    <circle r="15" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-width="2"/>
+    <circle r="6" fill="#f59e0b"/>
+
+    <!-- Orbital Ring (Broken) -->
+    <path d="M-45 0 A 45 45 0 0 1 45 0" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 5" opacity="0.8">
+       <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="5 0 0" values="0;5;-5;0" dur="0.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M45 0 A 45 45 0 0 1 -45 0" stroke="#78350f" stroke-width="2" opacity="0.3"/>
+
+    <!-- Arms (Locked) -->
+    <line x1="0" y1="0" x2="30" y2="10" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="30" cy="10" r="5" fill="#78350f"/>
+    
+    <line x1="30" y1="10" x2="50" y2="30" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Claw (Jammed) -->
+    <path d="M50 30 L60 25 M50 30 L55 40" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Warning Symbol -->
+    <text x="0" y="-25" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="24" fill="#f59e0b">!</text>
+  </g>
+
+  <!-- Status Badge (Top Right) -->
+  <circle cx="160" cy="40" r="6" fill="#f59e0b" filter="url(#glow-orange)">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="160" cy="40" r="3" fill="#ffffff"/>
+
+  <!-- Label -->
+  <text x="100" y="160" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="12" fill="#d97706" letter-spacing="1">STUCK</text>
+</svg>

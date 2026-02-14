@@ -1,0 +1,45 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Base Dark Color -->
+  <rect width="1920" height="1080" fill="#050505"/>
+  
+  <!-- Perspective Grid (Warehouse Floor) -->
+  <g stroke="#111111" stroke-width="1">
+    <!-- Vertical Perspective Lines -->
+    <line x1="960" y1="540" x2="0" y2="1080" stroke-opacity="0.5"/>
+    <line x1="960" y1="540" x2="320" y2="1080" stroke-opacity="0.5"/>
+    <line x1="960" y1="540" x2="640" y2="1080" stroke-opacity="0.5"/>
+    <line x1="960" y1="540" x2="960" y2="1080" stroke-opacity="0.8"/>
+    <line x1="960" y1="540" x2="1280" y2="1080" stroke-opacity="0.5"/>
+    <line x1="960" y1="540" x2="1600" y2="1080" stroke-opacity="0.5"/>
+    <line x1="960" y1="540" x2="1920" y2="1080" stroke-opacity="0.5"/>
+    
+    <!-- Horizontal Grid Lines -->
+    <line x1="0" y1="600" x2="1920" y2="600" stroke-opacity="0.2"/>
+    <line x1="0" y1="700" x2="1920" y2="700" stroke-opacity="0.3"/>
+    <line x1="0" y1="850" x2="1920" y2="850" stroke-opacity="0.4"/>
+    <line x1="0" y1="1080" x2="1920" y2="1080" stroke-opacity="0.5"/>
+  </g>
+
+  <!-- Abstract Shelving / Structures -->
+  <rect x="100" y="300" width="200" height="400" fill="#0a0a0a" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="1620" y="300" width="200" height="400" fill="#0a0a0a" stroke="#1a1a1a" stroke-width="2"/>
+  
+  <!-- Data Flow Elements -->
+  <path d="M960 540 L1920 0" stroke="#00ff41" stroke-width="2" stroke-dasharray="20 20" opacity="0.1"/>
+  <path d="M960 540 L0 0" stroke="#00ff41" stroke-width="2" stroke-dasharray="20 20" opacity="0.1"/>
+
+  <!-- HUD Overlay Corners -->
+  <path d="M50 50 H200 V52 H52 V200 H50 V50 Z" fill="#00ff41" opacity="0.5"/>
+  <path d="M1870 50 H1720 V52 H1868 V200 H1870 V50 Z" fill="#00ff41" opacity="0.5"/>
+  <path d="M50 1030 H200 V1028 H52 V880 H50 V1030 Z" fill="#00ff41" opacity="0.5"/>
+  <path d="M1870 1030 H1720 V1028 H1868 V880 H1870 V1030 Z" fill="#00ff41" opacity="0.5"/>
+
+  <!-- Subtle Vignette -->
+  <defs>
+    <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.8">
+      <stop offset="0.6" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.8"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#vignette)"/>
+</svg>

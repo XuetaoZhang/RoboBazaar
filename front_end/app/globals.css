@@ -1,0 +1,580 @@
+@import "tailwindcss";
+
+:root {
+  /* --background: #ffffff;
+  --foreground: #171717; */
+}
+
+@theme inline {
+  --color-background: var(--color-theme-background);
+  --color-foreground: var(--color-theme-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+.light {
+  --color-theme-foreground: #171717;
+  --color-theme-background: #edf2ee;
+}
+
+.dark {
+  --color-theme-foreground: #ece7d9;
+  --color-theme-background: #171717;
+}
+
+body {
+  background: var(--color-theme-background);
+  color: var(--color-theme-foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.rb-console {
+  --color-bg: #0b0c10;
+  --color-bg-alt: #12141c;
+  --color-primary: #6366f1;
+  --color-primary-glow: rgba(99, 102, 241, 0.4);
+  --color-accent-emerald: #10b981;
+  --color-accent-emerald-glow: rgba(16, 185, 129, 0.3);
+  --color-accent-red: #ef4444;
+  --color-accent-red-glow: rgba(239, 68, 68, 0.3);
+  --color-text-main: #f3f4f6;
+  --color-text-muted: #9ca3af;
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --bg-glass: rgba(18, 20, 28, 0.7);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --shadow-deep: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.rb-console,
+.rb-console * {
+  box-sizing: border-box;
+}
+
+.rb-console {
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.rb-console::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: -1;
+}
+
+.rb-console .glow-bg {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 60vh;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  filter: blur(100px);
+  z-index: -2;
+}
+
+.rb-console .app-container {
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 260px 1fr 300px;
+  height: 95vh;
+  padding: 20px 40px;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.rb-console .header {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+}
+
+.rb-console .col-fleet {
+  grid-column: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rb-console .col-center {
+  grid-column: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.rb-console .col-data {
+  grid-column: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+}
+
+.rb-console .card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  box-shadow: var(--shadow-deep);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.rb-console .card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.rb-console .fleet-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rb-console .fleet-item.active {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.rb-console .fleet-item:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rb-console .robot-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #1e1e24;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.rb-console .fleet-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rb-console .robot-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.rb-console .robot-status {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rb-console .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.rb-console .dot.green {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+
+.rb-console .dot.red {
+  background: #ef4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
+}
+
+.rb-console .dot.gray {
+  background: #6b7280;
+}
+
+.rb-console .status-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-left: 4px solid #10b981;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+  transition: all 0.3s ease;
+}
+
+.rb-console .status-banner.alert {
+  border-left-color: #ef4444;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.1) inset;
+}
+
+.rb-console .status-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rb-console .status-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.rb-console .status-value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rb-console .video-card {
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  border: 1px solid var(--border-glass);
+  flex: 1;
+  min-height: 0;
+}
+
+.rb-console .video-wrapper {
+  width: 100%;
+  flex: 1;
+  position: relative;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.rb-console video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 60vh;
+}
+
+.rb-console .overlay-ui {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.rb-console .tag {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rb-console .tag.live {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.rb-console .tag.live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #ef4444;
+  border-radius: 50%;
+}
+
+.rb-console .controls-deck {
+  padding: 16px;
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--border-glass);
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-height: 820px) {
+  .rb-console .app-container {
+    height: 100vh;
+    padding: 14px 28px;
+    gap: 14px;
+  }
+
+  .rb-console .status-banner {
+    padding: 12px 16px;
+  }
+
+  .rb-console .status-value {
+    font-size: 14px;
+  }
+
+  .rb-console video {
+    max-height: 46vh;
+  }
+
+  .rb-console .controls-deck {
+    padding: 12px;
+  }
+}
+
+.rb-console .btn-premium {
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.rb-console .btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.rb-console .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.rb-console .btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rb-console .btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.rb-console .btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rb-console .glass-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 400px;
+  background: rgba(18, 20, 28, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.rb-console .glass-modal.visible {
+  display: flex;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.rb-console .modal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rb-console .icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rb-console .icon-box.alert {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.rb-console .icon-box.success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.rb-console .modal-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.rb-console .modal-desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.rb-console .price-display {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rb-console .price-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.rb-console .console-output {
+  flex: 1;
+  background: #08090d;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #94a3b8;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rb-console .log-line {
+  display: flex;
+  gap: 12px;
+  opacity: 0.9;
+}
+
+.rb-console .log-ts {
+  color: #475569;
+  user-select: none;
+}
+
+.rb-console .log-msg.info {
+  color: #818cf8;
+}
+
+.rb-console .log-msg.success {
+  color: #34d399;
+}
+
+.rb-console .log-msg.error {
+  color: #f87171;
+}
+
+.rb-console .metrics-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rb-console .metrics-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rb-console .metrics-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.rb-console .stat-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.rb-console .stat-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rb-console .stat-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  min-height: 32px;
+  line-height: 1.2;
+}
+
+.rb-console .stat-value-lg {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.rb-console .stat-unit {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  margin-left: 2px;
+}
+
+.rb-console .stat-value-highlight {
+  color: #10b981;
+}
+
+.rb-console .icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
+.rb-console .icon-lg {
+  width: 24px;
+  height: 24px;
+}
