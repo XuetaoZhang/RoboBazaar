@@ -126,7 +126,7 @@ Open `webots_sim/worlds/warehouse.wbt` in Webots R2023a.
 |--------|------|
 | **Victor** | AI Agent Developer + Pitch Lead |
 | **MinQS** | Webots Simulation Engineer |
-| **Yeahoung** | Bridge & Integration Developer |
+| **Peming Woo** | Bridge & Integration Developer |
 | **Hersynne** | Frontend Operator Console |
 
 ---
